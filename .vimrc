@@ -1,61 +1,101 @@
-syntax on
-set ruler                     " show the line number on the bar
-set more                      " use more prompt
-set autoread                  " watch for file changes
-set number                    " line numbers
-set hidden
-set noautowrite               " don't automagically write on :next
-set lazyredraw                " don't redraw when don't have to
-set showmode
-set showcmd
-set nocompatible              " vim, not vi
-set autoindent smartindent    " auto/smart indent
-set smarttab                  " tab and backspace are smart
-set tabstop=2                 " 6 spaces
-set shiftwidth=2
-set scrolloff=5               " keep at least 5 lines above/below
-set sidescrolloff=5           " keep at least 5 lines left/right
-set history=200
-set backspace=indent,eol,start
-set linebreak
-set cmdheight=2               " command line two lines high
-set undolevels=1000           " 1000 undos
-set updatecount=100           " switch every 100 chars
-set complete=.,w,b,u,U,t,i,d  " do lots of scanning on tab completion
-set ttyfast                   " we have a fast terminal
-set noerrorbells              " No error bells please
-set shell=bash
-set fileformats=unix
-set ff=unix
-filetype on                   " Enable filetype detection
-filetype indent on            " Enable filetype-specific indenting
-filetype plugin on            " Enable filetype-specific plugins
-set wildmode=longest:full
-set wildmenu                  " menu has tab completion
-let maplocalleader=','        " all my macros start with ,
-set laststatus=2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Required for Vundle
+" All plugins go here
+" https://github.com/VundleVim/Vundle.vim
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"  searching
-set incsearch                 " incremental search
-set ignorecase                " search ignoring case
-set hlsearch                  " highlight the search
-set showmatch                 " show matching bracket
-set diffopt=filler,iwhite     " ignore all whitespace and sync
+set nocompatible              " be iMproved, required
+filetype off                  " required
 
-"  backup
-set backup
-set backupdir=~/.vim_backup
-set viminfo=%100,'100,/100,h,\"500,:100,n~/.viminfo
-"set viminfo='100,f1
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-" spelling
-if v:version >= 700
-      " Enable spell check for text files
-        autocmd BufNewFile,BufRead *.txt setlocal spell spelllang=en
-        endif
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
-        " mappings
-        " toggle list mode
-        nmap <LocalLeader>tl :set list!<cr>
-        " toggle paste mode
-        nmap <LocalLeader>pp :set paste!<cr>
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+"Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+"Plugin 'L9'
+" Git plugin not hosted on GitHub
+"Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+"Plugin 'user/L9', {'name': 'newL9'}
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-ruby/vim-ruby'
+
+set background=dark
+colorscheme solarized
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Basic Settings
+" Started with: http://mislav.uniqpath.com/2011/12/vim-revisited/
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set nocompatible                " choose no compatibility with legacy vi
+syntax enable
+set encoding=utf-8
+set showcmd                     " display incomplete commands
+filetype plugin indent on       " load file type plugins + indentation
+
+"" Whitespace
+set nowrap                      " don't wrap lines
+set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
+set expandtab                   " use spaces, not tabs (optional)
+set backspace=indent,eol,start  " backspace through everything in insert mode
+
+"" Searching
+set hlsearch                    " highlight matches
+set incsearch                   " incremental searching
+set ignorecase                  " searches are case insensitive...
+set smartcase                   " ... unless they contain at least one capital letter
+set guifont=Inconsolata\ for\ Powerline:h16
+let g:Powerline_symbols = 'fancy'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" For powerline
+"" https://powerline.readthedocs.org/en/latest/usage/other.html
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin specific settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"" NERDTree
+" Open a NERDTree automatically when vim starts up
+autocmd vimenter * NERDTree
+
+" Open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
